@@ -48,7 +48,7 @@ Prometheus stack (prometheus-community/kube-prometheus-stack) in the monitoring 
 Redis (bitnami/redis) with version 17.11.6 in the redis namespace with the release name my-redis and applies the configuration values specified in the values_redis.yaml.
 RabbitMQ (bitnami/rabbitmq) with version 12.0.4 in the rabbitmq namespace with the release name my-rabbitmq and applies the configuration values specified in the values_rabbitmq.yaml.
 
-### (explanation about the values, alerts and the configmap_cluster is in the readme file of the config directory )
+### (explanation about the values, alert and the configmap_cluster is in the readme file of the config directory )
 
 The following two commands apply Kubernetes resource configurations:
 Apply the configuration of the dashboards from config/configmap_cluster.yaml to create a ConfigMap in the monitoring namespace.
