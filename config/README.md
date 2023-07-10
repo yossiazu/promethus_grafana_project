@@ -267,13 +267,42 @@ Used to calculate the sum of Redis keys grouped by the database (db) for Redis i
 
 ## alerts.yaml
 this file configure the following alert rules under the group "myalerts":
+
 alert1: This alert calculates the percentage of CPU used by the node. It triggers a warning (severity: warning) when the CPU usage is very high (less than 70% idle) for at least 2 minutes.
-
+```
+    - alert: alert1
+      annotations:
+        description: calculates the percentage of CPU used by the node.
+        summary: CPU usage is very high.
+      expr: |
+        100 - (avg by(instance)(irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) < 70
+      for: 2m
+      labels:
+        severity: warning
+```
 alert2: This alert calculates the percentage of memory used by the node. It triggers a warning when the memory usage is very high (less than 70% available) for at least 2 minutes.
-
+```
+    - alert: alert2
+      annotations:
+        description: calculates the percentage of memory used by the node.
+        summary: memory usage is very high.
+      expr: |
+        ((node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100) < 70
+      for: 2m
+      labels:
+        severity: warning
+```
 alert3: This alert calculates the number of restarts for each pod. It triggers a warning when a pod has made more than 20 restarts within a 2m window.
-
-
-
+```
+    - alert: alert3
+      annotations:
+        description: calculates the number of restarts evrey pod have.
+        summary: this pod made more then 20 restarts.
+      expr: |
+        sum(kube_pod_container_status_restarts_total) by(pod) < 20
+      for: 2m
+      labels:
+        severity: warning
+```
 
 
