@@ -12,7 +12,7 @@ spec:
         description: calculates the percentage of CPU used by the node.
         summary: CPU usage is very high.
       expr: |
-        100 - (avg by(instance)(irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) < 70
+        100 - (avg by(instance)(irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 70
       for: 2m
       labels:
         severity: warning
@@ -21,7 +21,7 @@ spec:
         description: calculates the percentage of memory used by the node.
         summary: memory usage is very high.
       expr: |
-        ((node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100) < 70
+        ((node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100) > 70
       for: 2m
       labels:
         severity: warning
@@ -30,7 +30,7 @@ spec:
         description: calculates the number of restarts evrey pod have.
         summary: this pod made more then 20 restarts.
       expr: |
-        sum(kube_pod_container_status_restarts_total) by(pod) < 20
+        sum(kube_pod_container_status_restarts_total) by(pod) > 15
       for: 2m
       labels:
         severity: warning
