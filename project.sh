@@ -21,10 +21,10 @@ helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring
 helm install my-redis bitnami/redis --version 17.11.6 -n redis
 helm install my-rabbitmq bitnami/rabbitmq --version 12.0.4 -n rabbitmq
 
-kubectl apply -f configmap_cluster.yaml -n monitoring
-kubectl apply -f alert.yaml -n monitoring 
+kubectl apply -f config/configmap_cluster.yaml -n monitoring
+kubectl apply -f config/alert.yaml -n monitoring 
 
-helm upgrade prometheus prometheus-community/kube-prometheus-stack -n monitoring -f values_promethus.yaml
-helm upgrade my-redis bitnami/redis -n redis --values values_redis.yaml
-helm upgrade my-rabbitmq bitnami/rabbitmq -n rabbitmq --values values_rabbitmq.yaml
+helm upgrade prometheus prometheus-community/kube-prometheus-stack -n monitoring -f config/values_promethus.yaml
+helm upgrade my-redis bitnami/redis -n redis --values config/values_redis.yaml
+helm upgrade my-rabbitmq bitnami/rabbitmq -n rabbitmq --values config/values_rabbitmq.yaml
 
