@@ -16,7 +16,6 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
 
-
 helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring --values config/values_promethus.yaml
 helm install my-redis bitnami/redis --version 17.11.6 -n redis --values config/values_redis.yaml
 helm install my-rabbitmq bitnami/rabbitmq --version 12.0.4 -n rabbitmq --values config/values_rabbitmq.yaml
