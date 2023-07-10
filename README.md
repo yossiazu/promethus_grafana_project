@@ -1,4 +1,4 @@
-# monitoring project
+# MONITORING PROJECT
 This project involves deploying Prometheus and Grafana in a Kubernetes cluster. Within the cluster, there are RabbitMQ and Redis services that we monitor using Prometheus and visualize using Grafana. Each service has its own dashboard with specific metrics relevant to that service. Additionally, we have configured alerts to notify us in case of slightly extreme situations.
 
 To deploy this project automatically, you can simply run the project.sh file. This script will handle the deployment of Prometheus, Grafana, RabbitMQ, Redis, and all the necessary configurations and dependencies. Once deployed, you will have a fully functional monitoring setup with dashboards for RabbitMQ and Redis, as well as alerts set up to ensure timely notifications for critical events.
