@@ -4,7 +4,7 @@ This project involves deploying Prometheus and Grafana in a Kubernetes cluster. 
 To deploy this project automatically, you can simply run the project.sh file. This script will handle the deployment of Prometheus, Grafana, RabbitMQ, Redis, and all the necessary configurations and dependencies. Once deployed, you will have a fully functional monitoring setup with dashboards for RabbitMQ and Redis, as well as alerts set up to ensure timely notifications for critical events.
 
 ## project.sh
-explain in 2 parts:
+
 ### PART 1:
 ```
 NAMESPACE_NAMES=("redis" "rabbitmq" "monitoring")
