@@ -5,7 +5,7 @@ To deploy this project automatically, you can simply run the project.sh file. Th
 
 ## project.sh
 explain in 2 parts:
-### part 1:
+### PART 1:
 ```
 NAMESPACE_NAMES=("redis" "rabbitmq" "monitoring")
 
@@ -25,7 +25,7 @@ During each iteration, the script checks if a namespace with the current value o
 If NAMESPACE_EXISTS is empty, indicating that the namespace does not exist, the script creates the namespace using kubectl create namespace "$NAMESPACE_NAME" and prints a message saying that the namespace has been created.
 If NAMESPACE_EXISTS is not empty, indicating that the namespace already exists, the script prints a message saying that the namespace already exists.
 
-### part2:
+### PART 2:
 ```
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo add bitnami https://charts.bitnami.com/bitnami
