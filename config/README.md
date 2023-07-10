@@ -45,7 +45,7 @@ metrics:
 ```
 The changes enable the scraping of metrics from a Redis service and create a ServiceMonitor specifically for the Redis metrics-gathering service identified by the label app.kubernetes.io/component: metrics. Additionally, it enables the Prometheus rules in the redis namespace.
 
-# configmap_cluster.yaml, the dashboards.
+## configmap_cluster.yaml, the dashboards.
 The labeled JSON file in the config map is set as the initial dashboard for Grafana with the 'grafana_dashboard: "1"' label. Upon initialization, Grafana automatically loads and displays this predefined dashboard configuration.
 i will explain every dashboard separately:
 
@@ -265,7 +265,13 @@ sum (redis_db_keys{instance=~"$instance"}) by (db)
 ```
 Used to calculate the sum of Redis keys grouped by the database (db) for Redis instances that match the instance variable.
 
+## alerts.yaml
+this file configure the following alert rules under the group "myalerts":
+alert1: This alert calculates the percentage of CPU used by the node. It triggers a warning (severity: warning) when the CPU usage is very high (less than 70% idle) for at least 2 minutes.
 
+alert2: This alert calculates the percentage of memory used by the node. It triggers a warning when the memory usage is very high (less than 70% available) for at least 2 minutes.
+
+alert3: This alert calculates the number of restarts for each pod. It triggers a warning when a pod has made more than 20 restarts within a 2m window.
 
 
 
