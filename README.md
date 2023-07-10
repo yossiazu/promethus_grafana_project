@@ -31,38 +31,28 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
 
-
-helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring
-helm install my-redis bitnami/redis --version 17.11.6 -n redis
-helm install my-rabbitmq bitnami/rabbitmq --version 12.0.4 -n rabbitmq
+helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring --values config/values_promethus.yaml
+helm install my-redis bitnami/redis --version 17.11.6 -n redis --values config/values_redis.yaml
+helm install my-rabbitmq bitnami/rabbitmq --version 12.0.4 -n rabbitmq --values config/values_rabbitmq.yaml
 
 kubectl apply -f config/configmap_cluster.yaml -n monitoring
 kubectl apply -f config/alert.yaml -n monitoring 
-
-helm upgrade prometheus prometheus-community/kube-prometheus-stack -n monitoring -f config/values_promethus.yaml
-helm upgrade my-redis bitnami/redis -n redis --values config/values_redis.yaml
-helm upgrade my-rabbitmq bitnami/rabbitmq -n rabbitmq --values config/values_rabbitmq.yaml
 ```
 The given set of commands sets up monitoring with Prometheus, deploys Redis and RabbitMQ using Helm, and applies configuration updates. Here's a 
 summary of what each command does:
 
 The first three commands add Helm repositories for Prometheus Community and Bitnami and update the local Helm chart repositories.
 
-The next three commands install the following components using Helm charts:
-Prometheus stack (prometheus-community/kube-prometheus-stack) in the monitoring namespace with the release name prometheus.
-Redis (bitnami/redis) with version 17.11.6 in the redis namespace with the release name my-redis.
-RabbitMQ (bitnami/rabbitmq) with version 12.0.4 in the rabbitmq namespace with the release name my-rabbitmq.
+The next three commands install the following components using Helm charts with new values:
+Prometheus stack (prometheus-community/kube-prometheus-stack) in the monitoring namespace with the release name prometheus and applies the configuration values specified in the 'values_prometheus.yaml'.
+Redis (bitnami/redis) with version 17.11.6 in the redis namespace with the release name my-redis and applies the configuration values specified in the values_redis.yaml.
+RabbitMQ (bitnami/rabbitmq) with version 12.0.4 in the rabbitmq namespace with the release name my-rabbitmq and applies the configuration values specified in the values_rabbitmq.yaml.
 
-### (explanation about the values, alert and the configmap_cluster is in the readme of the config directory )
+### (explanation about the values, alerts and the configmap_cluster is in the readme file of the config directory )
 
 The following two commands apply Kubernetes resource configurations:
 Apply the configuration of the dashboards from config/configmap_cluster.yaml to create a ConfigMap in the monitoring namespace.
 Apply the configuration of the alerts from config/alert.yaml to create alert rules in the monitoring namespace for Prometheus.
-
-The last three commands perform upgrades to existing deployments using new configuration files:
-Upgrade the Prometheus stack (prometheus-community/kube-prometheus-stack) in the monitoring namespace, applying the configuration from config/values_promethus.yaml.
-Upgrade the Redis deployment (bitnami/redis) in the redis namespace, applying the configuration from config/values_redis.yaml.
-Upgrade the RabbitMQ deployment (bitnami/rabbitmq) in the rabbitmq namespace, applying the configuration from config/values_rabbitmq.yaml.
 
 ## close.sh
 ```
