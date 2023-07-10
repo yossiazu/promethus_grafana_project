@@ -1,0 +1,18 @@
+
+metrics:
+  enabled: true
+  podAnnotations:
+    prometheus.io/path: /metrics
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9419"
+  serviceMonitor:
+    enabled: true
+    selector:
+      app.kubernetes.io/instance: my-rabbitmq
+    namespace: rabbitmq
+    path: /metrics
+    interval: 30s
+    scrapeTimeout: 15s
+  prometheusRule:
+    enabled: true
+    namespace: rabbitmq
