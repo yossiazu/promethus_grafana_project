@@ -3,11 +3,21 @@
 
 * ### values_promethus.yaml
 ```
+  additionalDataSources: 
+    - name: loki
+      access: proxy
+      editable: true
+      orgId: 1
+      type: loki
+      url: http://my-grafana-loki-querier.monitoring:3100
+      version: 1
+...
 ruleSelectorNilUsesHelmValues: false
 ...
 serviceMonitorSelectorNilUsesHelmValues: false
 ```
-These changes enable Prometheus to access rules and ServiceMonitors beyond the default Helm values. By setting 'ruleSelectorNilUsesHelmValues' and 'serviceMonitorSelectorNilUsesHelmValues' to false, Prometheus is configured to use the actual cluster resources for rules and ServiceMonitors rather than relying only on the Helm values. This modification provides flexibility in selecting and monitoring resources within the cluster.
+The first change create a new data source named "loki" that Grafana can access. The service for this data source is named "my-grafana-loki-querier" residing within the "monitoring" namespace, and it operates on port 3100.
+The next two changes enable Prometheus to access rules and ServiceMonitors beyond the default Helm values. By setting 'ruleSelectorNilUsesHelmValues' and 'serviceMonitorSelectorNilUsesHelmValues' to false, Prometheus is configured to use the actual cluster resources for rules and ServiceMonitors rather than relying only on the Helm values. This modification provides flexibility in selecting and monitoring resources within the cluster.
 
 * ### values_rabbitmq.yaml
 ```
@@ -44,6 +54,16 @@ metrics:
     namespace: "redis"
 ```
 The changes enable the scraping of metrics from a Redis service and create a ServiceMonitor specifically for the Redis metrics-gathering service identified by the label app.kubernetes.io/component: metrics. Additionally, it enables the Prometheus rules in the redis namespace.
+
+* ### values_loki.yaml
+```
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    namespace: loki
+```
+The changes enable the scraping of metrics from the loki service and create a ServiceMonitor specifically for the loki metrics-gathering service.
 
 ## configmap_cluster.yaml, the dashboards.
 The labeled JSON file in the config map is set as the initial dashboard for Grafana with the 'grafana_dashboard: "1"' label. Upon initialization, Grafana automatically loads and displays this predefined dashboard configuration.
@@ -265,8 +285,25 @@ sum (redis_db_keys{instance=~"$instance"}) by (db)
 ```
 Used to calculate the sum of Redis keys grouped by the database (db) for Redis instances that match the instance variable.
 
+* ### Loki Dashboard quick search
+It is worth mentioning that I discovered this dashboard in the Grafana store. You can access the dashboard by following this link: https://grafana.com/grafana/dashboards/12019-loki-dashboard-quick-search/. The entire dashboard was obtained from that source.
+
+variables: 'namespace: (metric: kube_pod_info)', 'pod: (metric: container_network_receive_bytes_total{namespace=~"$namespace"})', 'search: level=warn'.
+
+1.
+```
+sum(count_over_time({namespace="$namespace", instance=~"$pod"} |~ "$search"[$__interval]))
+```
+ This Loki query counts the number of log entries over time, filtered by namespace, pod, and a specific search pattern.
+
+2.
+```
+{namespace="$namespace", instance=~"$pod"} |~ "$search"
+```
+The query retrieves log entries that belong to the specified namespace, match the instance or pod name pattern, and contain the specified search pattern.
+
 ## alerts.yaml
-this file configure the following alert rules under the group "myalerts":
+This file configure the following alert rules under the group "myalerts":
 
 alert1: This alert calculates the percentage of CPU used by the node. It triggers a warning (severity: warning) when the CPU usage is very high (more than 70%) for at least 2 minutes.
 ```
