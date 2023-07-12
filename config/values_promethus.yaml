@@ -844,6 +844,12 @@ alertmanager:
 grafana:
   enabled: true
   namespaceOverride: ""
+  plugins:
+    - redis-datasource
+    - redis-app
+  apps:
+    - type: redis-app
+      disabled: false
 
   ## ForceDeployDatasources Create datasource configmap even if grafana deployment has been disabled
   ##
@@ -982,6 +988,21 @@ grafana:
       orgId: 1
       type: loki
       url: http://my-grafana-loki-querier.monitoring:3100
+      version: 1
+    - name: redis
+      type: redis-datasource
+      access: proxy
+      editable: true
+      orgId: 1
+      url: redis://my-redis-master.redis:6379
+      jsonData:
+          client: standalone
+          poolSize: 5
+          timeout: 10
+          pingInterval: 0
+          pipelineWindow: 0
+      secureJsonData:
+        password: 12345
       version: 1
   # - name: prometheus-sample
   #   access: proxy
