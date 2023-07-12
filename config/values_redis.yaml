@@ -1,3 +1,5 @@
+auth:
+  password: "12345"
 metrics:
   enabled: true
   serviceMonitor:
