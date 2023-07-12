@@ -11,12 +11,27 @@
       type: loki
       url: http://my-grafana-loki-querier.monitoring:3100
       version: 1
+    - name: redis
+      type: redis-datasource
+      access: proxy
+      editable: true
+      orgId: 1
+      url: redis://my-redis-master.redis:6379
+      jsonData:
+          client: standalone
+          poolSize: 5
+          timeout: 10
+          pingInterval: 0
+          pipelineWindow: 0
+      secureJsonData:
+        password: 12345
+      version: 1
 ...
 ruleSelectorNilUsesHelmValues: false
 ...
 serviceMonitorSelectorNilUsesHelmValues: false
 ```
-The first change create a new data source named "loki" that Grafana can access. The service for this data source is named "my-grafana-loki-querier" residing within the "monitoring" namespace, and it operates on port 3100.
+The first change create a new data sourceses named "loki" and redis that Grafana can access (*for access redis grafana will need a password). The service for this data source is named "my-grafana-loki-querier" residing within the "monitoring" namespace, and it operates on port 3100.
 The next two changes enable Prometheus to access rules and ServiceMonitors beyond the default Helm values. By setting 'ruleSelectorNilUsesHelmValues' and 'serviceMonitorSelectorNilUsesHelmValues' to false, Prometheus is configured to use the actual cluster resources for rules and ServiceMonitors rather than relying only on the Helm values. This modification provides flexibility in selecting and monitoring resources within the cluster.
 
 * ### values_rabbitmq.yaml
@@ -43,6 +58,8 @@ These changes enable the scraping of RabbitMQ pod metrics with Prometheus. It es
 
 * ### values_redis.yaml
 ```
+auth:
+  password: "12345"
 metrics:
   enabled: true
   serviceMonitor:
@@ -53,7 +70,7 @@ metrics:
     enabled: true
     namespace: "redis"
 ```
-The changes enable the scraping of metrics from a Redis service and create a ServiceMonitor specifically for the Redis metrics-gathering service identified by the label app.kubernetes.io/component: metrics. Additionally, it enables the Prometheus rules in the redis namespace.
+The first two lines define a password to redis for grafana to be able to connect direct to redis as data-source, the next changes enable the scraping of metrics from a Redis service and create a ServiceMonitor specifically for the Redis metrics-gathering service identified by the label app.kubernetes.io/component: metrics. Additionally, it enables the Prometheus rules in the redis namespace.
 
 * ### values_loki.yaml
 ```
