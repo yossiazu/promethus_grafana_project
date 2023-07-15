@@ -31,7 +31,8 @@ ruleSelectorNilUsesHelmValues: false
 ...
 serviceMonitorSelectorNilUsesHelmValues: false
 ```
-The first change create a new data sourceses named "loki" and redis that Grafana can access (*for access redis grafana will need a password). The service for this data source is named "my-grafana-loki-querier" residing within the "monitoring" namespace, and it operates on port 3100.
+The first change create a new data sourceses named "loki" and "redis" that Grafana can access (*for access redis grafana will need a password). The service for loki data source is named "my-grafana-loki-querier" residing within the "monitoring" namespace, and it operates on port 3100.
+The service for redis data source is named "my-redis-master" within the "redis" namespace, and it operates on port 6379.
 The next two changes enable Prometheus to access rules and ServiceMonitors beyond the default Helm values. By setting 'ruleSelectorNilUsesHelmValues' and 'serviceMonitorSelectorNilUsesHelmValues' to false, Prometheus is configured to use the actual cluster resources for rules and ServiceMonitors rather than relying only on the Helm values. This modification provides flexibility in selecting and monitoring resources within the cluster.
 
 * ### values_rabbitmq.yaml
