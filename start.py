@@ -20,7 +20,7 @@ def add_repo_prometheus_community_and_bitnami():
     subprocess.run(['helm', 'repo', 'update'])
 
 def deploy_prometheus():
-    subprocess.run(['helm', 'install', 'prometheus', 'prometheus/kube-prometheus-stack', '-n', 'monitoring', '--values', 'config/values_promethus.yaml'])
+    subprocess.run(['helm', 'install', 'prometheus', 'prometheus-community/kube-prometheus-stack', '-n', 'monitoring', '--values', 'config/values_promethus.yaml'])
 
 def deploy_loki():
     subprocess.run(['helm', 'install', 'my-grafana-loki', 'bitnami/grafana-loki', '--version', '2.10.0', '-n', 'monitoring', '--values', 'config/values_loki.yaml'])
